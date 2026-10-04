@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#6b4aa3">
+  <meta name="description" content="Read New Testament verses for confidence, comfort, strength, patience, gratitude, peace and love.">
+  <title>Verses for Every Day — New Testament</title>
+  <style>
+    :root { color-scheme: light; --purple:#6b4aa3; --deep:#4a2f6b; --muted:#756783; --paper:#fff; --focus:#df9c27; }
+    * { box-sizing:border-box; }
+    body { min-height:100vh; margin:0; padding:clamp(16px,4vw,36px); color:#2c2930; font-family:system-ui,-apple-system,"Segoe UI",Georgia,serif; background:linear-gradient(135deg,#f8f4f0,#e9e4f0); }
+    .container { width:min(100%,720px); margin:0 auto; }
+    header { text-align:center; margin:8px 0 26px; }
+    h1 { margin:0 0 7px; color:var(--deep); font-size:clamp(1.6rem,5vw,2.15rem); line-height:1.2; }
+    .subtitle { margin:0; color:var(--muted); font-style:italic; }
+    .theme-tabs { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:0 0 22px; }
+    .tab,.action { min-height:44px; border:0; border-radius:999px; font:inherit; cursor:pointer; transition:background .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease; }
+    .tab { padding:9px 15px; color:var(--deep); background:#fff; box-shadow:0 2px 6px #00000012; }
+    .tab:hover,.tab[aria-pressed="true"] { color:#fff; background:var(--purple); }
+    .verse-card { display:flex; min-height:240px; flex-direction:column; justify-content:center; padding:clamp(22px,6vw,38px); border-radius:18px; background:var(--paper); box-shadow:0 8px 26px #4a2f6b1c; }
+    .verse-text { margin:0 0 20px; font-family:Georgia,"Times New Roman",serif; font-size:clamp(1.18rem,4vw,1.45rem); line-height:1.75; white-space:pre-line; }
+    .verse-ref { margin:0; color:var(--purple); font-size:1rem; font-weight:700; }
+    .controls { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:20px; }
+    .action { padding:11px 21px; font-size:1rem; }
+    .action:hover { transform:translateY(-2px); }
+    .action:active,.tab:active { transform:translateY(0); }
+    .primary { color:#fff; background:linear-gradient(135deg,#6b4aa3,#9369c4); }
+    .secondary { color:var(--deep); background:#f0ebf8; }
+    .count { margin:18px 0 0; color:var(--muted); text-align:center; font-size:.92rem; }
+    :focus-visible { outline:3px solid var(--focus); outline-offset:3px; }
+    button:disabled { cursor:not-allowed; opacity:.5; transform:none; }
+    @media (max-width:480px) { .theme-tabs { gap:7px; } .tab { padding:8px 12px; font-size:.88rem; } .controls { display:grid; grid-template-columns:1fr 1fr; } #nextBtn { grid-column:2; grid-row:1; } #prevBtn { grid-column:1; grid-row:1; } #randomBtn { grid-column:1 / -1; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; } }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>📖 Verses for Every Day</h1>
+      <p class="subtitle">New Testament — Strength for every moment</p>
+    </header>
+
+    <nav class="theme-tabs" aria-label="Filter verses by theme">
+      <button class="tab" type="button" data-theme="all" aria-pressed="true">All</button>
+      <button class="tab" type="button" data-theme="confidence" aria-pressed="false">Confidence</button>
+      <button class="tab" type="button" data-theme="comfort" aria-pressed="false">Comfort</button>
+      <button class="tab" type="button" data-theme="strength" aria-pressed="false">Strength</button>
+      <button class="tab" type="button" data-theme="patience" aria-pressed="false">Patience</button>
+      <button class="tab" type="button" data-theme="gratitude" aria-pressed="false">Gratitude</button>
+      <button class="tab" type="button" data-theme="peace" aria-pressed="false">Peace</button>
+      <button class="tab" type="button" data-theme="love" aria-pressed="false">Love</button>
+    </nav>
+
+    <section class="verse-card" aria-label="Selected Bible verse" aria-live="polite" aria-atomic="true">
+      <p class="verse-text" id="verseText"></p>
+      <p class="verse-ref" id="verseRef"></p>
+    </section>
+
+    <div class="controls" aria-label="Verse controls">
+      <button class="action secondary" id="prevBtn" type="button">← Previous</button>
+      <button class="action primary" id="nextBtn" type="button">Next →</button>
+      <button class="action secondary" id="randomBtn" type="button">✨ Random</button>
+    </div>
+    <p class="count" id="countDisplay" aria-live="polite"></p>
+  </main>
+
+  <script>
+    // Scripture quotations below use the King James Version (public domain).
+    const verses = [
+      { ref:"Matthew 11:28", text:"Come unto me, all ye that labour and are heavy laden, and I will give you rest.", themes:["comfort","strength","peace"] },
+      { ref:"Matthew 6:34", text:"Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof.", themes:["peace","patience"] },
+      { ref:"Matthew 5:16", text:"Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven.", themes:["confidence","love"] },
+      { ref:"Matthew 7:7", text:"Ask, and it shall be given you; seek, and ye shall find; knock, and it shall be opened unto you.", themes:["confidence","patience"] },
+      { ref:"Matthew 22:39", text:"Thou shalt love thy neighbour as thyself.", themes:["love"] },
+      { ref:"Mark 9:23", text:"Jesus said unto him, If thou canst believe, all things are possible to him that believeth.", themes:["confidence","strength"] },
+      { ref:"Luke 1:37", text:"For with God nothing shall be impossible.", themes:["confidence","strength"] },
+      { ref:"Luke 6:31", text:"And as ye would that men should do to you, do ye also to them likewise.", themes:["love"] },
+      { ref:"John 1:5", text:"And the light shineth in darkness; and the darkness comprehended it not.", themes:["confidence","strength","peace"] },
+      { ref:"John 3:16", text:"For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.", themes:["love","confidence"] },
+      { ref:"John 14:1", text:"Let not your heart be troubled: ye believe in God, believe also in me.", themes:["comfort","peace","confidence"] },
+      { ref:"John 14:27", text:"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.", themes:["peace","comfort","confidence"] },
+      { ref:"John 15:12", text:"This is my commandment, That ye love one another, as I have loved you.", themes:["love"] },
+      { ref:"John 16:33", text:"These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.", themes:["peace","strength","confidence"] },
+      { ref:"Acts 20:35", text:"It is more blessed to give than to receive.", themes:["gratitude","love"] },
+      { ref:"Romans 8:28", text:"And we know that all things work together for good to them that love God, to them who are the called according to his purpose.", themes:["confidence","patience"] },
+      { ref:"Romans 8:38–39", text:"For I am persuaded, that neither death, nor life, nor angels, nor principalities, nor powers, nor things present, nor things to come, nor height, nor depth, nor any other creature, shall be able to separate us from the love of God, which is in Christ Jesus our Lord.", themes:["love","confidence","comfort"] },
+      { ref:"Romans 12:12", text:"Rejoicing in hope; patient in tribulation; continuing instant in prayer.", themes:["patience","gratitude","confidence"] },
+      { ref:"Romans 15:13", text:"Now the God of hope fill you with all joy and peace in believing, that ye may abound in hope, through the power of the Holy Ghost.", themes:["peace","confidence","gratitude"] },
+      { ref:"1 Corinthians 13:4", text:"Charity suffereth long, and is kind; charity envieth not; charity vaunteth not itself, is not puffed up.", themes:["love","patience"] },
+      { ref:"1 Corinthians 16:14", text:"Let all your things be done with charity.", themes:["love"] },
+      { ref:"2 Corinthians 12:9", text:"And he said unto me, My grace is sufficient for thee: for my strength is made perfect in weakness.", themes:["strength","comfort"] },
+      { ref:"Galatians 6:9", text:"And let us not be weary in well doing: for in due season we shall reap, if we faint not.", themes:["patience","strength"] },
+      { ref:"Ephesians 4:32", text:"And be ye kind one to another, tenderhearted, forgiving one another, even as God for Christ's sake hath forgiven you.", themes:["love"] },
+      { ref:"Philippians 4:4", text:"Rejoice in the Lord alway: and again I say, Rejoice.", themes:["gratitude","confidence"] },
+      { ref:"Philippians 4:6–7", text:"Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus.", themes:["peace","gratitude","comfort"] },
+      { ref:"Philippians 4:13", text:"I can do all things through Christ which strengtheneth me.", themes:["strength","confidence"] },
+      { ref:"Colossians 3:15", text:"And let the peace of God rule in your hearts, to the which also ye are called in one body; and be ye thankful.", themes:["peace","gratitude"] },
+      { ref:"1 Thessalonians 5:16–18", text:"Rejoice evermore. Pray without ceasing. In every thing give thanks: for this is the will of God in Christ Jesus concerning you.", themes:["gratitude","peace","confidence"] },
+      { ref:"2 Thessalonians 3:16", text:"Now the Lord of peace himself give you peace always by all means. The Lord be with you all.", themes:["peace","comfort"] },
+      { ref:"Hebrews 10:36", text:"For ye have need of patience, that, after ye have done the will of God, ye might receive the promise.", themes:["patience","confidence"] },
+      { ref:"Hebrews 13:5", text:"I will never leave thee, nor forsake thee.", themes:["comfort","confidence"] },
+      { ref:"James 1:5", text:"If any of you lack wisdom, let him ask of God, that giveth to all men liberally, and upbraideth not; and it shall be given him.", themes:["confidence","strength"] },
+      { ref:"1 Peter 5:7", text:"Casting all your care upon him; for he careth for you.", themes:["comfort","peace"] },
+      { ref:"1 Peter 5:10", text:"But the God of all grace, who hath called us unto his eternal glory by Christ Jesus, after that ye have suffered a while, make you perfect, stablish, strengthen, settle you.", themes:["strength","patience","comfort"] },
+      { ref:"1 John 4:19", text:"We love him, because he first loved us.", themes:["love","gratitude"] },
+      { ref:"1 John 4:18", text:"There is no fear in love; but perfect love casteth out fear.", themes:["love","confidence","peace"] },
+      { ref:"Jude 1:24", text:"Now unto him that is able to keep you from falling, and to present you faultless before the presence of his glory with exceeding joy.", themes:["confidence","gratitude"] }
+    ];
+
+    const textEl = document.getElementById("verseText");
+    const refEl = document.getElementById("verseRef");
+    const countEl = document.getElementById("countDisplay");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    let activeTheme = "all";
+    let visibleVerses = verses;
+    let currentIndex = 0;
+
+    function renderVerse() {
+      const verse = visibleVerses[currentIndex];
+      if (!verse) return;
+      textEl.textContent = `“${verse.text}”`;
+      refEl.textContent = `— ${verse.ref} (KJV)`;
+      countEl.textContent = `Verse ${currentIndex + 1} of ${visibleVerses.length}${activeTheme === "all" ? "" : ` · ${activeTheme[0].toUpperCase()}${activeTheme.slice(1)}`}`;
+      prevBtn.disabled = visibleVerses.length < 2;
+      nextBtn.disabled = visibleVerses.length < 2;
+    }
+
+    function setTheme(theme) {
+      activeTheme = theme;
+      visibleVerses = theme === "all" ? verses : verses.filter(verse => verse.themes.includes(theme));
+      currentIndex = 0;
+      document.querySelectorAll(".tab").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.theme === theme));
+      });
+      renderVerse();
+    }
+
+    function move(step) {
+      currentIndex = (currentIndex + step + visibleVerses.length) % visibleVerses.length;
+      renderVerse();
+    }
+
+    document.querySelectorAll(".tab").forEach(button => button.addEventListener("click", () => setTheme(button.dataset.theme)));
+    prevBtn.addEventListener("click", () => move(-1));
+    nextBtn.addEventListener("click", () => move(1));
+    document.getElementById("randomBtn").addEventListener("click", () => {
+      if (visibleVerses.length < 2) return;
+      let nextIndex;
+      do { nextIndex = Math.floor(Math.random() * visibleVerses.length); } while (nextIndex === currentIndex);
+      currentIndex = nextIndex;
+      renderVerse();
+    });
+    renderVerse();
+  </script>
+</body>
+</html>
